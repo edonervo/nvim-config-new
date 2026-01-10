@@ -63,10 +63,15 @@ keymap("x", "K", ":m '<-2<CR>gv=gv", opts)
 keymap("x", "<A-j>", ":m '>+1<CR>gv=gv", opts)
 keymap("x", "<A-k>", ":m '<-2<CR>gv=gv", opts)
 
--- Terminal --
--- Better terminal navigation
--- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
--- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
--- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
--- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
+-- Use <Tab> to jump over closing pairs
+vim.keymap.set("i", "<Tab>", function()
+  local col = vim.fn.col(".")
+  local line = vim.fn.getline(".")
+  local next_char = line:sub(col, col)
 
+  if next_char:match("[%]%})\"']") then
+    return "<Right>"
+  end
+
+  return "<Tab>"
+end, { expr = true })
