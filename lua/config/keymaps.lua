@@ -81,3 +81,16 @@ keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require
 keymap("n", "<c-t>", "<cmd>Telescope live_grep<cr>", opts)
 -- Nvimtree
 keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+-- auto close nvim tree
+vim.api.nvim_create_autocmd("BufEnter", {
+  nested = true,
+  callback = function()
+    if
+      #vim.api.nvim_list_wins() == 1
+      and vim.bo.filetype == "NvimTree"
+    then
+      vim.cmd("quit")
+    end
+  end,
+})
+
